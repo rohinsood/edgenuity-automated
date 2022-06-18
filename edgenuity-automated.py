@@ -72,7 +72,3 @@ except:
 # next activity
 next_activity = waitFindElement(By.XPATH, '//a[@title="Next Activity"]')
 next_activity.click()
-
-
-
-
