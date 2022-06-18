@@ -81,63 +81,51 @@ next_activity.click()
 iFrame = waitFindElement(By.XPATH, "//iframe")
 driver.switch_to.frame(iFrame)
 
-# find next activity btn
-
-
 # store frames
 total_frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
 
 # store the next btn
 next_frame = total_frames[ (len(total_frames)-1) ]
 
-# remove the last and first frames (nav btns)
-total_frames.pop(0)
-total_frames.pop( (len(total_frames)-1) )
-
-# store the next btn
-next_frame = total_frames[ (len(total_frames)-1) ]
+# create activity frames
+activity_frames = total_frames
 
 # remove the last and first frames (nav btns)
-total_frames.pop(0)
-total_frames.pop( (len(total_frames)-1) )
+activity_frames.pop(0)
+activity_frames.pop( (len(activity_frames)-1) )
 
 # find current frame
-for frame in total_frames:
+for frame in activity_frames:
 
     # remove elements before the current frame
     if (frame.get_attribute("class") == "FrameCurrent"):
         upcoming_frames = list(dropwhile( lambda completedFrame: completedFrame != frame, total_frames ))
+        print(len(upcoming_frames))
         break
-    else:
-        continue
 
 # iterate through all upcoming frames
 for index in range(len(upcoming_frames)):
 
     # check if frame is a question or video
     try:
-        # this is in m:s / m:s format, the second m:s is the video length
+        # this is in "m:s / m:s" format, the second m:s is the video length
         video_timer = waitFindElement(By.XPATH, '//li[@id="uid1_time"]').text
-
-        # this isolates the second m:s into one string
         video_length_ms = (video_timer.split())[2]
 
         # this splits isoltes the minutes and seconds of the above strings & converts minutes to seconds to find the video length in seconds
         video_length_ms = video_length_ms.split(":")
         video_length_s = (int(video_length_ms[0])*60) + int(video_length_ms[1])
 
-        # this waits for the video length
         real_time.sleep(video_length_s)
 
         # if the current frame is the last frame, click the next activity button and not the next frame button
         if (index == len(upcoming_frames)):
-            # go to the next activity
             next_activity = waitFindElement()
             next_activity.click
 
         else: 
-            # go to the next frame
             next_frame.click
 
     except TimeoutException:
+        print("TEXT FRAME")
         pass
