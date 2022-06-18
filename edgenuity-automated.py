@@ -61,3 +61,11 @@ edgenuity_click.perform()
 driver.switch_to.window(driver.window_handles[0])
 driver.close()
 driver.switch_to.window(driver.window_handles[0])
+
+# become the current active session if necessary
+try:
+    active_sesh = waitFindElement(By.NAME, 'continue')
+    active_sesh.click()
+except:
+    pass
+
