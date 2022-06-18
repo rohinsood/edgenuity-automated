@@ -76,3 +76,14 @@ next_activity.click()
 # switch to iFrame element 
 iFrame = waitFindElement(By.XPATH, "//iframe")
 driver.switch_to.frame(iFrame)
+
+
+# store frames
+frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
+
+# store the next btn
+next_frame = frames[ (len(frames)-1) ]
+
+# remove the last and first frames (nav btns)
+frames.pop(0)
+frames.pop( (len(frames)-1) )
