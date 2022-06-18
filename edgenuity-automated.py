@@ -43,10 +43,10 @@ def waitFindElements( finder: By, element: str):
 
 # login to myplan
 username_input = waitFindElement(By.ID, "username")
-username_input.send_keys("SCHOOL_ID")
+username_input.send_keys("1861253")
 
 password_input = waitFindElement(By.ID, "password")
-password_input.send_keys("PASSWORD")
+password_input.send_keys("FlatwoundChamba1028$")
 
 password_input.send_keys(Keys.RETURN)
 
@@ -77,13 +77,29 @@ next_activity.click()
 iFrame = waitFindElement(By.XPATH, "//iframe")
 driver.switch_to.frame(iFrame)
 
-
 # store frames
-frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
+total_frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
 
 # store the next btn
-next_frame = frames[ (len(frames)-1) ]
+next_frame = total_frames[ (len(total_frames)-1) ]
 
 # remove the last and first frames (nav btns)
-frames.pop(0)
-frames.pop( (len(frames)-1) )
+total_frames.pop(0)
+total_frames.pop( (len(total_frames)-1) )
+
+# store the next btn
+next_frame = total_frames[ (len(total_frames)-1) ]
+
+# remove the last and first frames (nav btns)
+total_frames.pop(0)
+total_frames.pop( (len(total_frames)-1) )
+
+# find current frame
+for frame in total_frames:
+
+    # remove elements before the current frame
+    if (frame.get_attribute("class") == "FrameCurrent"):
+        upcoming_frames = list(dropwhile( lambda completedFrame: completedFrame != frame, total_frames ))
+        break
+    else:
+        continue
