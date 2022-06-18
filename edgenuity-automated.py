@@ -50,3 +50,14 @@ password_input.send_keys("PASSWORD")
 
 password_input.send_keys(Keys.RETURN)
 
+# open edgenuity through app link
+edgenuity_link = waitFindElement(By.XPATH, '//application[@aria-label="Edgenuity (Student)"]')
+
+edgenuity_click = ActionChains(driver=driver)
+edgenuity_click.context_click(edgenuity_link).send_keys(Keys.RETURN)
+edgenuity_click.perform()
+
+# close myplan
+driver.switch_to.window(driver.window_handles[0])
+driver.close()
+driver.switch_to.window(driver.window_handles[0])
