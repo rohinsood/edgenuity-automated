@@ -1,5 +1,6 @@
 from distutils.command.build import build
 from itertools import dropwhile
+from socket import timeout
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -9,6 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 import time as real_time
+from selenium.common.exceptions import TimeoutException
 
 ch_options=webdriver.ChromeOptions()
 ch_options.add_experimental_option("detach", True)
@@ -19,7 +21,7 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 
 driver.get("https://launchpad.classlink.com/poway")
 
-wait = WebDriverWait(driver=driver, timeout=10)
+wait = WebDriverWait(driver=driver, timeout=5)
 
 def findElement( finder: By, element: str ):
     return driver.find_element(finder, element)
@@ -68,7 +70,7 @@ driver.switch_to.window(driver.window_handles[0])
 try:
     active_sesh = waitFindElement(By.NAME, 'continue')
     active_sesh.click()
-except:
+except TimeoutException:
     pass
 
 # next activity
@@ -114,7 +116,6 @@ for index in range(len(upcoming_frames)):
 
     # check if frame is a question or video
     try:
-
         # this is in m:s / m:s format, the second m:s is the video length
         video_timer = waitFindElement(By.XPATH, '//li[@id="uid1_time"]').text
 
@@ -130,13 +131,13 @@ for index in range(len(upcoming_frames)):
 
         # if the current frame is the last frame, click the next activity button and not the next frame button
         if (index == len(upcoming_frames)):
-            
             # go to the next activity
             next_activity = waitFindElement()
             next_activity.click
-        else: 
 
+        else: 
             # go to the next frame
             next_frame.click
-    except:
+
+    except TimeoutException:
         pass
