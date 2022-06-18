@@ -8,10 +8,12 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
+import time as real_time
 
 ch_options=webdriver.ChromeOptions()
 ch_options.add_experimental_option("detach", True)
 ch_options.add_argument('log-level=3')
+ch_options.add_argument('−−mute−audio')
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=ch_options)
 
@@ -77,6 +79,9 @@ next_activity.click()
 iFrame = waitFindElement(By.XPATH, "//iframe")
 driver.switch_to.frame(iFrame)
 
+# find next activity btn
+
+
 # store frames
 total_frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
 
@@ -103,3 +108,35 @@ for frame in total_frames:
         break
     else:
         continue
+
+# iterate through all upcoming frames
+for index in range(len(upcoming_frames)):
+
+    # check if frame is a question or video
+    try:
+
+        # this is in m:s / m:s format, the second m:s is the video length
+        video_timer = waitFindElement(By.XPATH, '//li[@id="uid1_time"]').text
+
+        # this isolates the second m:s into one string
+        video_length_ms = (video_timer.split())[2]
+
+        # this splits isoltes the minutes and seconds of the above strings & converts minutes to seconds to find the video length in seconds
+        video_length_ms = video_length_ms.split(":")
+        video_length_s = (int(video_length_ms[0])*60) + int(video_length_ms[1])
+
+        # this waits for the video length
+        real_time.sleep(video_length_s)
+
+        # if the current frame is the last frame, click the next activity button and not the next frame button
+        if (index == len(upcoming_frames)):
+            
+            # go to the next activity
+            next_activity = waitFindElement()
+            next_activity.click
+        else: 
+
+            # go to the next frame
+            next_frame.click
+    except:
+        pass
