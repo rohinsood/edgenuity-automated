@@ -41,3 +41,12 @@ def waitFindElements( finder: By, element: str):
     
     return driver.find_elements(finder, element)
 
+# login to myplan
+username_input = waitFindElement(By.ID, "username")
+username_input.send_keys("SCHOOL_ID")
+
+password_input = waitFindElement(By.ID, "password")
+password_input.send_keys("PASSWORD")
+
+password_input.send_keys(Keys.RETURN)
+
