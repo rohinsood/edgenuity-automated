@@ -72,3 +72,7 @@ except:
 # next activity
 next_activity = waitFindElement(By.XPATH, '//a[@title="Next Activity"]')
 next_activity.click()
+
+# switch to iFrame element 
+iFrame = waitFindElement(By.XPATH, "//iframe")
+driver.switch_to.frame(iFrame)
