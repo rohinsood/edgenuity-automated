@@ -1,7 +1,7 @@
 # Edgenuity Automated 😈
 > 🏫 A browser script to automatically move to the next video/question when the video is complete or when the question is answered
 
-> 🖊️ This helps students stay focused & productive throughout an activity & minimizes time waste between videos and questions
+> 🖊️ This helps students stay focused & productive throughout an activity & minimizes the time waste navigating between videos and questions
 
 > NOTE: This script is not meant to be used to actually automate the process of completing an activity. It is meant to be used as a tool to boost productity and attentiveness. 
 ---
