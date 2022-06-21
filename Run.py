@@ -7,5 +7,4 @@ MyPlan.closeMyPlan()
 
 Edgenuity.activeSession()
 Edgenuity.nextActivity()
-Edgenuity.switchToIframe()
 Edgenuity.completeActivity()
