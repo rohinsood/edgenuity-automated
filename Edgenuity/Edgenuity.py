@@ -4,30 +4,43 @@ def activeSession():
     try:
         active_sesh = waitFindElement(By.NAME, 'continue')
         active_sesh.click()
+
+        print("Becoming active session")
+
     except TimeoutException:
+
         pass
 
 def nextActivity():
+
     next_activity = waitFindElement(By.XPATH, '//a[@title="Next Activity"]')
     next_activity.click()
 
-def switchToIframe():
-    iFrame = waitFindElement(By.XPATH, "//iframe")
+    print("Going to the next activity")
+
+    iFrame = waitFindElement(By.XPATH, '//iframe[@allowtransparency="true"]', implicit_wait=10)
     driver.switch_to.frame(iFrame)
+    
+    print("Switching to iframe")
 
 def completeActivity():
     total_frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
     activity_frames = total_frames
     activity_frames.pop(0)
     activity_frames.pop( (len(activity_frames)-1) )
+
+    print("Setting up frame storage")
+
     for frame in activity_frames:
 
         if ((frame.get_attribute("class") == "FrameCurrent")):
 
+            print("Finding current frame")
             upcoming_frames = list(dropwhile( lambda completedFrame: completedFrame != frame, total_frames ))
             break
         elif ((frame.get_attribute("class") == "FrameCurrent FrameComplete")):
-
+            
+            print("Current frame is already complete")
             next_frame = waitFindElement(By.XPATH, '//li[@class="FrameRight"]/a')
             next_frame.click()
             continue
@@ -61,8 +74,10 @@ def completeActivity():
             count = 0
             time_passed_log = []
 
-            while((time_passed_s != video_length_s)):
+            print("Waiting for video to finish")
 
+            while((time_passed_s != video_length_s)):
+                
                 video_timer = waitFindElement(By.XPATH, '//li[@class="timer"]')
                 
                 video_timer = video_timer.text.split(" / ")
@@ -83,10 +98,18 @@ def completeActivity():
                     time_passed_log = []
                     count = 0
 
+            print("Video finished!")
+
             if (frame == upcoming_frames[( len(upcoming_frames)-1 )]):
+
+                print("Last frame!")
+                next_frame = waitFindElement(By.XPATH, '//li[@class="FrameRight"]/a')
+                next_frame.click()
                 break
 
             else: 
+
+                print("Next frame!")
                 next_frame = waitFindElement(By.XPATH, '//li[@class="FrameRight"]/a')
                 next_frame.click()
                 continue
@@ -94,21 +117,29 @@ def completeActivity():
         except TimeoutException:
 
             driver.execute_script("alert('You are on a question frame!');")
-            
+            print("Question Frame!")
+
             while True:
                 try:
                     driver.switch_to.alert
                 except:
                     break
             
-            current_or_complete = frame.get_attribute("class")
-            while ((current_or_complete != "FrameCurrent  FrameComplete") or (current_or_complete == "FrameCurrent FrameComplete")): 
-                current_or_complete = frame.get_attribute("class")
+            print("Waiting for question to be marked as complete")
+            next_frame_ready = waitFindElement(By.XPATH, '//li[@class="FrameRight"]/a').get_attribute("style")
+            while (next_frame_ready == "opacity: 1;"):
+                next_frame_ready = waitFindElement(By.XPATH, '//li[@class="FrameRight"]/a').get_attribute("style")
             
             if (frame == upcoming_frames[( len(upcoming_frames)-1 )]):
+                
+                print("Last frame!")
+                next_frame = waitFindElement(By.XPATH, '//li[@class="FrameRight"]/a')
+                next_frame.click()
                 break
 
             else: 
+
+                print("Next frame!")
                 next_frame = waitFindElement(By.XPATH, '//li[@class="FrameRight"]/a')
                 next_frame.click()
                 continue
