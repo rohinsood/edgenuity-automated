@@ -11,6 +11,7 @@ from selenium.common.exceptions import TimeoutException
 
 chrome_options=webdriver.ChromeOptions()
 chrome_options.add_experimental_option("detach", True)
+chrome_options.add_argument("--window-size=840,640")
 chrome_options.add_argument('log-level=3')
 chrome_options.add_argument('−−mute−audio')
 # chrome_options.add_argument("--headless")
