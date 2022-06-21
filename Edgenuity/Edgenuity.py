@@ -112,3 +112,6 @@ def completeActivity():
                 next_frame = waitFindElement(By.XPATH, '//li[@class="FrameRight"]/a')
                 next_frame.click()
                 continue
+    
+    print("Activity successfully completed!")
+    driver.quit()
