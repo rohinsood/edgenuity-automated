@@ -87,10 +87,8 @@ driver.switch_to.frame(iFrame)
 # store frames
 total_frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
 
-# create activity frames
-activity_frames = total_frames
-
 # remove the last and first frames (nav btns)
+activity_frames = total_frames
 activity_frames.pop(0)
 activity_frames.pop( (len(activity_frames)-1) )
 
