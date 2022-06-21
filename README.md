@@ -39,5 +39,5 @@ FIX: Run the script again
 ```
 ### Preview 🤑
 ![Question Frame Popup](https://cdn.discordapp.com/attachments/882455696199807007/988707957439090729/unknown.png)
-_This shows the alert box that will appear when a question is detected, you must click 'OK' to answer the question_
+_This shows the alert box that will appear when a question is detected, you must click 'OK' in order to answer the question_
 
