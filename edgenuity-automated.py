@@ -49,10 +49,10 @@ def waitFindElements( finder: By, element: str, implicit_wait=0 ):
 
 # login to myplan
 username_input = waitFindElement(By.ID, "username")
-username_input.send_keys("USERNAME")
+username_input.send_keys("1861253")
 
 password_input = waitFindElement(By.ID, "password")
-password_input.send_keys("PASSWORD")
+password_input.send_keys("FlatwoundChamba1028$")
 
 password_input.send_keys(Keys.RETURN)
 
@@ -75,6 +75,10 @@ try:
     active_sesh.click()
 except TimeoutException:
     pass
+
+# next activity
+next_activity = waitFindElement(By.XPATH, '//a[@title="Next Activity"]')
+next_activity.click()
 
 # switch to iFrame element 
 iFrame = waitFindElement(By.XPATH, "//iframe")
