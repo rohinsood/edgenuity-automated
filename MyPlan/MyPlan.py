@@ -22,6 +22,8 @@ def login():
 
     password_input.send_keys(Keys.RETURN)
 
+    waitFindElementClick(By.XPATH, '//button[@id="signin"]')
+
 def openEdgenuity():
 
     print("Opening Edgenuity")
