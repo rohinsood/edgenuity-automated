@@ -16,7 +16,7 @@ pip install selenium webdriver_manager
 ```
 4. Enter your MyPlan username and password on lines 1 and 2 of ```login.txt``` <br /><br />
 ![login.txt image](https://cdn.discordapp.com/attachments/882455696199807007/988711576137793536/unknown.png)
-
+---
 ## Run 🥶
 1. Open the folder of the repository ```cd .\path\to\edgenuity-automated```
 2. Run ```Run.py``` 
@@ -32,13 +32,14 @@ python3 Run.py
 py Run.py
 ```
 ---
-### Known Bugs 🤫
+## Known Bugs 🤫
 1. When logging in to MyPlan, sometimes the request takes too long & the script times out.
 ```cmd
 FIX: Try cicking the Login button in the browser (This isn't reliable because timeouts can still occur due to human error)
 FIX: Run the script again (Usually works another time around)
 ```
-### Preview 🤑
+---
+## Preview 🤑
 ![Question Frame Popup](https://cdn.discordapp.com/attachments/882455696199807007/988707957439090729/unknown.png)
 _This shows the alert box that will appear when a question is detected, you must click 'OK' in order to answer the question_
 

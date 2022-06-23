@@ -5,7 +5,7 @@ def activeSession():
         active_sesh = waitFindElement(By.NAME, 'continue')
         active_sesh.click()
 
-        print("Becoming active session")
+        print("--\(˙<>˙)/-- Becoming active session")
 
     except TimeoutException:
 
@@ -49,7 +49,7 @@ def completeActivity():
     for frame in upcoming_frames:
         try:
             
-            print("Checking for question")
+            print("--\(˙<>˙)/-- Checking for question")
 
             video_iframe = waitFindElement(By.XPATH, '//iframe[@id="iFramePreview"]')
             driver.switch_to.frame(video_iframe)
@@ -107,6 +107,6 @@ def completeActivity():
                 continue
 
             
-    print("Activity successfully completed!")
+    print("--\(˙<>˙)/-- Activity successfully completed!")
 
     driver.quit()

@@ -3,7 +3,7 @@ from Utils import *
 def login():
     driver.get("https://launchpad.classlink.com/poway")
 
-    print("Opening MyPlan")
+    print("--\(˙<>˙)/-- Opening MyPlan")
 
     lines = []
     with open("login.txt") as f:
