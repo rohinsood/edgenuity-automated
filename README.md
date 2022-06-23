@@ -27,6 +27,10 @@ python Run.py
 ```cmd
 python3 Run.py
 ```
+```OR```
+```cmd
+py Run.py
+```
 ---
 ### Known Bugs 🤫
 1. When logging in to MyPlan, sometimes the request takes too long & the script times out.
