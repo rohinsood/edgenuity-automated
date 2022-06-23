@@ -29,13 +29,10 @@ python3 Run.py
 ```
 ---
 ### Known Bugs 🤫
-1. When watching a video, the frame must be hovered over in order to show the info regarding the video length and time passed. The script artifically hovers over the frame, but if it detects a user cursor, the script will crash because the info then becomes hidden. I am currently working on reading the values when the video is not hovered over, but for now, please resort to the temporary fix
+1. When logging in to MyPlan, sometimes the request takes too long & the script times out.
 ```cmd
-FIX: Keep your mouse away from the browser
-```
-2. When logging in to MyPlan, sometimes the request takes too long & the script times out.
-```cmd
-FIX: Run the script again
+FIX: Try cicking the Login button in the browser (This isn't reliable because timeouts can still occur due to human error)
+FIX: Run the script again (Usually works another time around)
 ```
 ### Preview 🤑
 ![Question Frame Popup](https://cdn.discordapp.com/attachments/882455696199807007/988707957439090729/unknown.png)
