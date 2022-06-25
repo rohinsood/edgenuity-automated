@@ -17,13 +17,9 @@ def login():
     username_input = waitFindElement(By.ID, "username")
     username_input.send_keys(USERNAME)
 
-    try:
-        password_input = waitFindElement(By.ID, "password")
-        password_input.send_keys(PASSWORD)
-        password_input.send_keys(Keys.RETURN)
-    except:
-        waitFindElementClick(By.XPATH, '//button[@id="signin"]')
-
+    password_input = waitFindElement(By.ID, "password")
+    password_input.send_keys(PASSWORD)
+    username_input.send_keys(Keys.RETURN)
 
 def openEdgenuity():
 
