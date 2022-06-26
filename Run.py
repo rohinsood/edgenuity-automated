@@ -1,10 +1,6 @@
-from MyPlan import *
 from Edgenuity import *
 
-MyPlan.login()
-MyPlan.openEdgenuity()
-MyPlan.closeMyPlan()
-
+Edgenuity.login()
 Edgenuity.activeSession()
 Edgenuity.nextActivity()
 Edgenuity.completeActivity()

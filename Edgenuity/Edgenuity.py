@@ -1,5 +1,21 @@
 from Utils import *
 
+def login():
+
+    lines = []
+    with open("login.txt") as f:
+        lines = f.readlines()
+
+    USERNAME = lines[0].strip()
+    PASSWORD = lines[1].strip() 
+
+    print("Logging in...")
+    driver.get("https://auth.edgenuity.com/Login/Login/Student")
+    waitFindElement(By.ID, "LoginUsername").send_keys(USERNAME)
+    waitFindElement(By.XPATH, '//input[@id="LoginPassword"]').send_keys(PASSWORD)
+    waitFindElement(By.XPATH, '//button[@id="LoginSubmit"]').click()
+    print("Logged in!")
+
 def activeSession():
     try:
         active_sesh = waitFindElement(By.NAME, 'continue')

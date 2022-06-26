@@ -14,7 +14,7 @@ git clone https://github.com/rohinsood/edgenuity-automated.git
 ```cmd
 pip install selenium webdriver_manager
 ```
-4. Enter your MyPlan username and password on lines 1 and 2 of ```login.txt``` <br /><br />
+4. Enter your Edgenuity username and password on lines 1 and 2 of ```login.txt``` <br /><br />
 ![login.txt image](https://cdn.discordapp.com/attachments/882455696199807007/988711576137793536/unknown.png)
 ---
 ## Run 🥶
