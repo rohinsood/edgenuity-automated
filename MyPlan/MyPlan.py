@@ -1,9 +1,10 @@
+from ast import For
 from Utils import *
 
 def login():
     driver.get("https://launchpad.classlink.com/poway")
 
-    print("--\(˙<>˙)/-- Opening MyPlan")
+    print(Fore.BLUE + "Opening MyPlan" + Fore.RESET)
 
     lines = []
     with open("login.txt") as f:

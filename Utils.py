@@ -1,5 +1,6 @@
 from itertools import dropwhile
 from selenium import webdriver
+from colorama import Fore
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
@@ -10,7 +11,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.common.exceptions import NoSuchElementException
-from colorama import Fore
 
 chrome_options=webdriver.ChromeOptions()
 chrome_options.add_experimental_option("detach", True)
@@ -66,7 +66,7 @@ def waitFindElementClick ( finder: By, element: str):
 def waitForOpacityChange ( finder: By, element: str ):
     opacity_element = waitFindElement(finder, element)
     
-    print("Waiting for next button to flash")
+    print(Fore.RESET + "Waiting for next button to flash")
 
     # wait for opacity to change
     while ((opacity_element.get_attribute('style') == "") or (opacity_element.get_attribute('style') == "opacity: 1;")):
@@ -74,10 +74,5 @@ def waitForOpacityChange ( finder: By, element: str ):
             opacity_element = waitFindElement(finder, element)
         except NoSuchElementException:
             break
-
-    opacity_element = waitFindElement(finder, (element + "/a"))
-    opacity_element.click()
-
-    
 
     

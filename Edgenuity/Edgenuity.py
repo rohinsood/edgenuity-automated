@@ -5,7 +5,7 @@ def activeSession():
         active_sesh = waitFindElement(By.NAME, 'continue')
         active_sesh.click()
 
-        print("--\(˙<>˙)/-- Becoming active session")
+        print("Becoming active session")
 
     except TimeoutException:
 
@@ -16,7 +16,7 @@ def nextActivity():
     next_activity = waitFindElement(By.XPATH, '//a[@title="Next Activity"]')
     next_activity.click()
 
-    print("Going to the next activity")
+    print(Fore.RED + "Going to the next activity" + Fore.RESET)
 
 def completeActivity():
     print("Switching to iframe")
@@ -49,20 +49,18 @@ def completeActivity():
     for frame in upcoming_frames:
         try:
             
-            print("--\(˙<>˙)/-- Checking for question")
-
             video_iframe = waitFindElement(By.XPATH, '//iframe[@id="iFramePreview"]')
             driver.switch_to.frame(video_iframe)
             waitFindElement(By.CLASS_NAME, 'title-bar')
 
-            print("Question Detected!")
+            print(Fore.GREEN + "Question detected" + Fore.RESET)
 
             driver.switch_to.default_content()
             driver.switch_to.frame(stage_iframe)
 
             driver.execute_script("alert('You are on a question frame!');")
             
-            print("Alerted!")
+            print("Alerted")
             
             while True:
                 try:
@@ -70,43 +68,29 @@ def completeActivity():
                 except:
                     break
             
-            waitForOpacityChange(By.XPATH, '//li[@class="FrameRight"]')
-            
-            print("Question complete!")
-
-            if (frame == upcoming_frames[( len(upcoming_frames)-1 )]):
-                
-                print("Last frame!")
-                break
-
-            else: 
-
-                print("Next frame!")
-                continue
-    
 
         except TimeoutException:
 
-            print("Video Detected!")
+            print(Fore.YELLOW + "Video Detected" + Fore.RESET)
 
             driver.switch_to.default_content()
             driver.switch_to.frame(stage_iframe)
-
-            waitForOpacityChange(By.XPATH, '//li[@class="FrameRight"]')
-
-            print("Video finished!")
-
-            if (frame == upcoming_frames[( len(upcoming_frames)-1 )]):
+        
+        waitForOpacityChange(By.XPATH, '//li[@class="FrameRight"]')
                 
-                print("Last frame!")
-                break
-
-            else: 
+        if (frame == upcoming_frames[( len(upcoming_frames)-1 )]):
                 
-                print("Next frame!")
-                continue
+            print(Fore.RED + "~ Last frame ~" + Fore.RESET)
+            break
+
+        else: 
+
+            waitFindElementClick(By.XPATH, '//li[@class="FrameRight"]/a')
+            print(Fore.RED + "~ Next frame ~" + Fore.RESET)
+            continue
+    
 
             
-    print("--\(˙<>˙)/-- Activity successfully completed!")
+    print(Fore.LIGHTMAGENTA_EX + "Activity successfully completed!")
 
     driver.quit()
