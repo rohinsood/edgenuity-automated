@@ -10,6 +10,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.common.exceptions import NoSuchElementException
+from colorama import Fore
 
 chrome_options=webdriver.ChromeOptions()
 chrome_options.add_experimental_option("detach", True)
@@ -20,7 +21,7 @@ chrome_options.add_argument('−−mute−audio')
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
-wait = WebDriverWait(driver=driver, timeout=5)
+wait = WebDriverWait(driver=driver, timeout=4)
 
 def findElement( finder: By, element: str, implicit_wait=0 ):
     driver.implicitly_wait(implicit_wait)
@@ -47,6 +48,12 @@ def waitFindElements( finder: By, element: str ):
     )
 
     return driver.find_elements(finder, element)
+
+def findElementClick ( finder: By, element: str, implicit_wait=0 ):
+
+    driver.implicitly_wait(implicit_wait)
+    print(driver.find_element(finder, element).get_attribute('class'))
+    driver.find_element(finder, element).click()
 
 def waitFindElementClick ( finder: By, element: str):
     wait.until(EC.element_to_be_clickable(
