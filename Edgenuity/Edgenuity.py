@@ -16,7 +16,7 @@ def nextActivity():
     next_activity = waitFindElement(By.XPATH, '//a[@title="Next Activity"]')
     next_activity.click()
 
-    print(Fore.RED + "Going to the next activity" + Fore.RESET)
+    print(Fore.RED + "~ Next activity ~" + Fore.RESET)
 
 def completeActivity():
     print("Switching to iframe")
@@ -60,45 +60,11 @@ def completeActivity():
             except TimeoutException:
                 pass
             
-            search_strings = []
-            try:
-                
-                try:
-
-                    reading = waitFindElement(By.XPATH, '//div[@class="reading pane-blue"]').text
-                    print(Fore.LIGHTCYAN_EX + "    Reading MC question detected" + Fore.RESET)
-
-                    search_strings.append('"' + reading + '"')
-
-                except TimeoutException:
-
-                    print(Fore.CYAN + "  Multiple choice question detected" + Fore.RESET)
-
-                question_content = waitFindElements(By.XPATH, '//div[@class="Practice_Question_Body"]')
-                question = question_content[0].text
-
-                search_strings.append('"' + question + '"')
-
-                answer_choices = waitFindElements(By.XPATH, '//div[@class="answer-choice"]', question_content[1])
-                answer_choices = [choice.text for choice in answer_choices]
-
-                [search_strings.append('"' + choice + '"') for choice in answer_choices]
-
-                search_string = ' '.join(search_strings)
-
-                driver.switch_to.new_window('tab')
-                driver.get('https://www.google.com/search?q=' + search_string)
-                driver.switch_to.window(driver.window_handles[0])
-
-                
-            except TimeoutException:
-                
-                waitFindElement('//div[@id="matchingActivity"]')
-                print(Fore.CYAN + "    Matching activity detected" + Fore.RESET)
+            handleQuestion()
             
         except TimeoutException:
 
-            print(Fore.YELLOW + "Video Detected" + Fore.RESET)
+            print(Fore.MAGENTA + "Video Detected" + Fore.RESET)
 
         driver.switch_to.default_content()
         driver.switch_to.frame(stage_iframe)
@@ -111,7 +77,10 @@ def completeActivity():
         driver.switch_to.default_content()
         driver.switch_to.frame(stage_iframe)
 
-        waitForOpacityChange(By.XPATH, '//li[@class="FrameRight"]')
+        try:
+            waitForOpacityChange(By.XPATH, '//li[@class="FrameRight"]')
+        except StaleElementReferenceException:
+            break
 
         print(Fore.RED + "~ Next frame ~" + Fore.RESET)
         waitFindElementClick(By.XPATH, '//li[@class="FrameRight"]/a')
@@ -121,3 +90,59 @@ def completeActivity():
     print(Fore.LIGHTMAGENTA_EX + "~ Activity successfully completed! ~" + Fore.RESET)
 
     driver.quit()
+
+def handleQuestion():
+    question_container = waitFindElement(By.XPATH, '//div[@fstack]')
+
+    search_strings = []
+    try:
+        
+        try:
+
+            reading = waitFindElement(By.XPATH, '//div[@class="reading pane-blue"]', parent=question_container).text
+            print(Fore.LIGHTCYAN_EX + "    Reading MC question detected" + Fore.RESET)
+
+            search_strings.append('"' + reading + '"')
+
+        except TimeoutException:
+
+            print(Fore.CYAN + "  Multiple choice question detected" + Fore.RESET)
+
+        question_content = waitFindElements(By.XPATH, '//div[@class="Practice_Question_Body"]', parent=question_container)
+        question = question_content[0].text
+
+        search_strings.append('"' + question + '"')
+        
+        answer_choices = waitFindElements(By.XPATH, '//div[@class="answer-choice"]', parent=question_content[1])
+        answer_choices = [choice.text for choice in answer_choices]
+
+        [search_strings.append('"' + choice + '"') for choice in answer_choices]
+
+        search_string = ' '.join(search_strings)
+
+        driver.switch_to.new_window('tab')
+        driver.get('https://www.google.com/search?q=' + search_string)
+        driver.switch_to.window(driver.window_handles[0])
+
+    except TimeoutException:
+        
+        try:
+            search_strings = []
+
+            dropdown_question = waitFindElements(By.XPATH, '//form/p', parent=question_container)
+
+            dropdown_question = [choice.text for choice in dropdown_question]
+            [search_strings.append('"' + choice + '"') for choice in dropdown_question]
+            
+            print(Fore.CYAN + "    Dropdown MC detected" + Fore.RESET)
+
+            search_string = ' '.join(search_strings)
+
+            driver.switch_to.new_window('tab')
+            driver.get('https://www.google.com/search?q=' + search_string)
+            driver.switch_to.window(driver.window_handles[0])
+
+        except TimeoutException:
+
+            waitFindElement('//div[@id="matchingActivity"]')
+            print(Fore.CYAN + "    Matching activity detected" + Fore.RESET)  

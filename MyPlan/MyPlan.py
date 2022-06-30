@@ -26,7 +26,7 @@ def openEdgenuity():
 
     print("Opening Edgenuity")
 
-    edgenuity_link = waitFindElement(By.XPATH, '//application[@aria-label="Edgenuity (Student)"]')
+    edgenuity_link = waitFindElement(By.XPATH, '//application[@aria-label="Edgenuity (Student)"]', timeout=10)
 
     edgenuity_click = ActionChains(driver=driver)
     edgenuity_click.context_click(edgenuity_link).send_keys(Keys.RETURN)
