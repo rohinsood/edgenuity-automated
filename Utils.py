@@ -22,7 +22,7 @@ chrome_options.add_argument('−−mute−audio')
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
-wait = WebDriverWait(driver=driver, timeout=4)
+wait = WebDriverWait(driver=driver, timeout=2)
 
 def findElement( finder: By, element: str, implicit_wait=0 ):
     driver.implicitly_wait(implicit_wait)
@@ -34,11 +34,20 @@ def findElements( finder: By, element: str, implicit_wait=0 ):
 
     return driver.find_elements(finder, element)    
 
-def waitFindElement( finder: By, element: str, parent=None ):
-    wait.until(EC.element_to_be_clickable(
-            (finder, element)
+def waitFindElement ( finder: By, element: str, parent=None, timeout=0 ):
+
+    if (timeout != 0):
+        wait = WebDriverWait(driver=driver, timeout=timeout)
+        wait.until(EC.element_to_be_clickable(
+                (finder, element)
+            )
         )
-    )
+    else:
+        wait = WebDriverWait(driver=driver, timeout=2)
+        wait.until(EC.element_to_be_clickable(
+                (finder, element)
+            )
+        )
 
     if parent is None:
         return driver.find_element(finder, element)
@@ -85,6 +94,6 @@ def waitForOpacityChange ( finder: By, element: str ):
         except NoSuchElementException:
             break
     
-    print(Fore.YELLOW + "~ Frame marked as complete after " + time_lapsed + " seconds" + Fore.RESET)
+    print("")
 
     
