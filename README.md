@@ -40,7 +40,5 @@ FIX: Run the script again (Usually works another time around)
 ```
 ---
 ## Preview 🤑
-![Question Frame Popup](https://cdn.discordapp.com/attachments/882455696199807007/988707957439090729/unknown.png)
-_This shows the alert box that will appear when a question is detected, you must click 'OK' in order to answer the question_ <br /> <br />
-![Console](https://cdn.discordapp.com/attachments/882455696199807007/989586648192929842/unknown.png) <br />
-_This shows the console output when running the script_
+![Console Output](https://media.discordapp.net/attachments/882455696199807007/993448709947936788/unknown.png)
+This shows an example console output <br /> <br />
