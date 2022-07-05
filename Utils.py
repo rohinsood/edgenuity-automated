@@ -35,6 +35,7 @@ def findElements( finder: By, element: str, implicit_wait=0 ):
 
     return driver.find_elements(finder, element)    
 
+
 def waitFindElement ( finder: By, element: str, parent=None, timeout=0 ):
 
     if (timeout != 0):
@@ -55,11 +56,20 @@ def waitFindElement ( finder: By, element: str, parent=None, timeout=0 ):
     else:
         return parent.find_element(finder, element)
 
-def waitFindElements( finder: By, element: str, parent=None ):
-    wait.until(EC.element_to_be_clickable(
-            (finder, element)
+
+def waitFindElements( finder: By, element: str, parent=None, timeout=0 ):
+    if (timeout != 0):
+        wait = WebDriverWait(driver=driver, timeout=timeout)
+        wait.until(EC.element_to_be_clickable(
+                (finder, element)
+            )
         )
-    )
+    else:
+        wait = WebDriverWait(driver=driver, timeout=2)
+        wait.until(EC.element_to_be_clickable(
+                (finder, element)
+            )
+        )
 
     if parent is None:
         return driver.find_elements(finder, element)
@@ -91,7 +101,7 @@ def waitForOpacityChange ( finder: By, element: str ):
         print( update_string, end="\r", )
 
         try:
-            opacity_element = waitFindElement(finder, element)
+            opacity_element = findElement(finder, element)
         except NoSuchElementException:
             break
     
