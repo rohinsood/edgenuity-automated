@@ -11,6 +11,13 @@ def activeSession():
 
         pass
 
+def closeAnnouncement():
+    try:
+        waitFindElementClick(By.XPATH, '//button[@class="close"]')
+        print("Closing announcement")
+    except TimeoutException:
+        pass
+
 def nextActivity():
 
     next_activity = waitFindElement(By.XPATH, '//a[@title="Next Activity"]')
@@ -20,11 +27,16 @@ def nextActivity():
 
 def completeActivity():
     print("Switching to iframe")
+    driver.switch_to.default_content()
     stage_iframe = waitFindElement(By.XPATH, '//iframe[@id="stageFrame"]', parent=None, timeout=10)
     driver.switch_to.frame(stage_iframe)
 
     try:
-        total_frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
+
+        try:
+            total_frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
+        except StaleElementReferenceException:
+            completeActivity()
         activity_frames = total_frames
         activity_frames.pop(0)
         activity_frames.pop( (len(activity_frames))-1 )
@@ -40,7 +52,6 @@ def completeActivity():
         if (cont == 'y'):
             print("  Continuing...")
 
-
             waitFindElementClick(By.XPATH, '//button[@data-bind="click: $root.startActivity"]')
 
             questions = waitFindElements(By.XPATH, '//ol[@id="navBtnList"]/li', parent=None, timeout=10)
@@ -55,7 +66,7 @@ def completeActivity():
             
             questions[0].click()
 
-    if (activity_frames != 0):
+    if (activity_frames != []):
         for frame in activity_frames:
 
             if ((frame.get_attribute("class") == "FrameCurrent")):
@@ -122,15 +133,18 @@ def completeActivity():
             except TimeoutException:
                 next_check = True
                 continue
+    else:
+        print(Fore.LIGHTMAGENTA_EX + "~ Task successfully completed! ~" + Fore.RESET)
+        return
             
-    print(Fore.LIGHTMAGENTA_EX + "~ Task successfully completed! ~" + Fore.RESET)
 
     driver.switch_to.default_content()
     waitFindElementClick(By.XPATH, '//a[@class="footnav goRight"]')
 
+    print(Fore.RED + "~ Next activity ~" + Fore.RESET)
+    
     completeActivity()
 
-    print(Fore.RED + "~ Next activity ~" + Fore.RESET)
 
 
 def handleQuestion():
