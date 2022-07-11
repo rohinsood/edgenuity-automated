@@ -105,9 +105,7 @@ def completeActivity():
                 
                 handleQuestion()
                 
-            except TimeoutException:
-
-                print(Fore.MAGENTA + "Video Detected" + Fore.RESET)
+            except TimeoutException:...
 
             driver.switch_to.default_content()
             stage_iframe = waitFindElement(By.XPATH, '//iframe[@id="stageFrame"]')
@@ -158,7 +156,7 @@ def handleQuestion():
             reading = waitFindElement(By.XPATH, '//div[@class="reading pane-blue"]', parent=question_container).text
             print(Fore.LIGHTCYAN_EX + "    Reading MC question detected" + Fore.RESET)
 
-            search_strings.append('"' + reading + '"')
+            search_strings.append(reading)
 
         except TimeoutException:
             pass
@@ -166,21 +164,12 @@ def handleQuestion():
         question_content = waitFindElements(By.XPATH, '//div[@class="Practice_Question_Body"]', parent=question_container)
         question = question_content[0].text
 
-
         search_strings.append('"' + question + '"')
         
         answer_choices = waitFindElements(By.XPATH, '//div[@class="answer-choice"]', parent=question_content[1])
         answer_choices = [choice.text for choice in answer_choices]
 
-        print(Fore.CYAN + "    Multiple choice question detected" + Fore.RESET)
-
-        [search_strings.append(choice) for choice in answer_choices]
-
-        search_string = ' '.join(search_strings)
-
-        driver.switch_to.new_window('tab')
-        driver.get('https://www.google.com/search?q=' + search_string)
-        driver.switch_to.window(driver.window_handles[0])
+        search(answer_choices, search_strings)
 
     except TimeoutException:
         
@@ -190,15 +179,10 @@ def handleQuestion():
             dropdown_question = waitFindElements(By.XPATH, '//form/p', parent=question_container)
 
             dropdown_question = [choice.text for choice in dropdown_question]
-            [search_strings.append(choice) for choice in dropdown_question]
-            
+
             print(Fore.CYAN + "    Dropdown MC detected" + Fore.RESET)
-
-            search_string = ' '.join(search_strings)
-
-            driver.switch_to.new_window('tab')
-            driver.get('https://www.google.com/search?q=' + search_string)
-            driver.switch_to.window(driver.window_handles[0])
+            
+            search(dropdown_question, search_strings)
 
         except TimeoutException:
 
@@ -215,20 +199,42 @@ def handleQuestion():
                     print(Fore.CYAN + "    Matching activity detected" + Fore.RESET)
 
                 except TimeoutException:
-                    
-                    try:
 
-                        reading = waitFindElement(By.XPATH, '//div[@class="reading pane-blue"]').text
-                        print(Fore.LIGHTCYAN_EX + "    Reading short answer question detected" + Fore.RESET)
+                        try:
+                            search_strings = []
 
-                        search_strings.append('"' + reading + '"')
+                            print("finding textarea")
+                            waitFindElement(By.XPATH, '//textarea[@class="QuestionTextArea"]')
 
-                    except TimeoutException:
-                        pass
+                            try:
+                                print("finding reading")
 
-                    question_iframe = waitFindElement(By.XPATH, '//iframe[@id="iFramePreview"]')
-                    driver.switch_to.frame(question_iframe)
+                                reading = waitFindElement(By.XPATH, '//div[@class="reading pane-blue"]').text
 
-                    waitFindElement(By.CLASS_NAME, 'QuestionTextArea')
+                                search_strings.append(reading)
 
-                    print(Fore.CYAN + "    Short Answer Detected" + Fore.RESET)
+                            except TimeoutException: ...
+
+
+                            prompts = waitFindElements(By.XPATH, '//div[@class="Practice_Question_Body"]')
+                            print("list comprehension")
+                            prompts = [prompt.text for prompt in prompts]
+
+                            print(Fore.CYAN + "    Short Answer Detected" + Fore.RESET)
+
+                            search(prompts, search_strings)
+
+                        except TimeoutException:
+                            pass
+
+def search(choices, search_strings):
+    
+    [search_strings.append(choice) for choice in choices]
+    search_string = ' '.join(search_strings)
+
+    driver.switch_to.new_window('tab')
+    driver.get('https://www.google.com/search?q=' + search_string)
+
+    driver.switch_to.window(driver.window_handles[0])
+
+
