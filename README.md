@@ -12,7 +12,7 @@ git clone https://github.com/rohinsood/edgenuity-automated.git
 ```
 3. Install the dependencies 
 ```cmd
-pip install selenium webdriver_manager
+pip install -r requirements.txt
 ```
 4. Enter your Edgenuity username and password on lines 1 and 2 of ```login.txt``` <br /><br />
 ![login.txt image](https://cdn.discordapp.com/attachments/882455696199807007/988711576137793536/unknown.png)
@@ -40,7 +40,5 @@ FIX: Run the script again (Usually works another time around)
 ```
 ---
 ## Preview 🤑
-![Question Frame Popup](https://cdn.discordapp.com/attachments/882455696199807007/988707957439090729/unknown.png)
-_This shows the alert box that will appear when a question is detected, you must click 'OK' in order to answer the question_ <br /> <br />
-![Console](https://cdn.discordapp.com/attachments/882455696199807007/989586648192929842/unknown.png) <br />
-_This shows the console output when running the script_
+![Console Output](https://media.discordapp.net/attachments/882455696199807007/993448709947936788/unknown.png)
+This shows an example console output <br />
