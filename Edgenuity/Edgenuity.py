@@ -2,8 +2,7 @@ from Utils import *
 
 def activeSession():
     try:
-        active_sesh = waitFindElement(By.NAME, 'continue')
-        active_sesh.click()
+        waitFindElementClick(By.NAME, 'continue')
 
         print("Becoming active session")
 
@@ -15,17 +14,22 @@ def closeAnnouncement():
     try:
         waitFindElementClick(By.XPATH, '//button[@class="close"]')
         print("Closing announcement")
+
     except TimeoutException:
         pass
 
 def nextActivity():
 
-    next_activity = waitFindElement(By.XPATH, '//a[@title="Next Activity"]')
-    next_activity.click()
+    waitFindElementClick(By.XPATH, '//a[@title="Next Activity"]')
 
     print(Fore.RED + "~ Next activity ~" + Fore.RESET)
 
 def completeActivity():
+
+    try: 
+        waitFindElementClick(By.XPATH, '//button[@href="#activity"]')
+    except TimeoutException: ...
+
     print("Switching to iframe")
     driver.switch_to.default_content()
     stage_iframe = waitFindElement(By.XPATH, '//iframe[@id="stageFrame"]', parent=None, timeout=10)
@@ -37,6 +41,7 @@ def completeActivity():
             total_frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
         except StaleElementReferenceException:
             completeActivity()
+
         activity_frames = total_frames
         activity_frames.pop(0)
         activity_frames.pop( (len(activity_frames))-1 )
@@ -137,7 +142,11 @@ def completeActivity():
             
 
     driver.switch_to.default_content()
-    waitFindElementClick(By.XPATH, '//a[@class="footnav goRight"]')
+
+    try:
+        waitFindElementClick(By.XPATH, '//a[@class="footnav goRight"]')
+    except TimeoutException:
+        waitFindElementClick(By.XPATH, '//a[@title="Next Activity"]')
 
     print(Fore.RED + "~ Next activity ~" + Fore.RESET)
     
@@ -203,11 +212,9 @@ def handleQuestion():
                         try:
                             search_strings = []
 
-                            print("finding textarea")
                             waitFindElement(By.XPATH, '//textarea[@class="QuestionTextArea"]')
 
                             try:
-                                print("finding reading")
 
                                 reading = waitFindElement(By.XPATH, '//div[@class="reading pane-blue"]').text
 
@@ -217,7 +224,6 @@ def handleQuestion():
 
 
                             prompts = waitFindElements(By.XPATH, '//div[@class="Practice_Question_Body"]')
-                            print("list comprehension")
                             prompts = [prompt.text for prompt in prompts]
 
                             print(Fore.CYAN + "    Short Answer Detected" + Fore.RESET)

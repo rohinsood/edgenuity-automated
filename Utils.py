@@ -23,7 +23,7 @@ chrome_options.add_argument('−−mute−audio')
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
-wait = WebDriverWait(driver=driver, timeout=2)
+wait = WebDriverWait(driver=driver, timeout=1.5)
 
 def findElement( finder: By, element: str, implicit_wait=0 ):
     driver.implicitly_wait(implicit_wait)
