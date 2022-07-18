@@ -1,3 +1,4 @@
+from xml.dom.minidom import Element
 from Utils import *
 from .Handling import *
 
@@ -37,7 +38,7 @@ def completeActivity():
     activity_type = waitFindElement(By.XPATH, '//h2[@id="activity-title"]').text
     print(Fore.GREEN + "~ Activity type: " + activity_type + Fore.RESET)
             
-    if (activity_type == "Instruction" or activity_type == "Warm-Up" or activity_type == "Summary"):
+    if (activity_type == "Instruction" or activity_type == "Warm-Up" or activity_type == "Summary" or activity_type == "Assignment"):
         try:
             switchToStage()
             
@@ -93,8 +94,22 @@ def completeActivity():
                 except TimeoutException:
                     pass
                 
-                handleQuestion()
+                if(activity_type == "Assignment"):
+                    handleQuestion()
+                else:
+                    while True:
+                        try:
+                            print("clicking answer cjoice")
+                            waitFindElementClick(By.XPATH, '//div[@class="answer-choice"]')
+                            print("clicked")
+                            break
+                        except ElementClickInterceptedException:
+                            pass
+                        except TimeoutException:
+                            break
 
+                    waitForOpacityChangeClick(By.XPATH, '//li[@class="FrameRight"]')
+                    
                 if (frame == upcoming_frames[( len(upcoming_frames)-1 )] and (frame.value_of_css_property("class") == "FrameCurrent FrameComplete")):
                     
                     print(Fore.RED + "~ Last frame ~" + Fore.RESET)
@@ -121,7 +136,6 @@ def completeActivity():
 
                 next_check = True
                 continue
-
     else:
 
         cont = input("  Continue? (y/n) ") 

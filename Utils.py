@@ -114,4 +114,28 @@ def waitForOpacityChange ( finder: By, element: str ):
     
     print("")
 
-    
+
+def waitForOpacityChangeClick ( finder: By, element: str ):
+
+    opacity_element = waitFindElement(finder, element)
+        
+    start_time = time.time()
+    while ((opacity_element.get_attribute('style') == "") or (opacity_element.get_attribute('style') == "opacity: 1;")):
+        end_time = time.time()
+        time_lapsed = str(round((end_time - start_time), 3))
+        update_string = Fore.YELLOW + "~ Waiting for frame to be marked as complete - Time lapsed: " + time_lapsed + Fore.RESET
+        print( update_string, end="\r", )
+
+        try:
+            print("tryna click")
+            waitFindElementClick(By.XPATH, '//span[@id="btnCheck"]')
+            print("clicked")
+        except ElementClickInterceptedException: 
+            print("intercepted")
+
+        try:
+            opacity_element = findElement(finder, element)
+        except NoSuchElementException:
+            break
+
+        print("")
