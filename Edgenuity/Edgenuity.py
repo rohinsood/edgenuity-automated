@@ -25,6 +25,7 @@ def nextActivity():
 
     print(Fore.GREEN + "~ Next activity ~" + Fore.RESET)
 
+
 def completeActivity():
 
     try: 
@@ -34,66 +35,23 @@ def completeActivity():
     except TimeoutException: ...
 
     activity_type = waitFindElement(By.XPATH, '//h2[@id="activity-title"]').text
-
-    switchToStage()
-    print("Switching to iframe")
-
-    try:
-
+    print(Fore.GREEN + "~ Activity type: " + activity_type + Fore.RESET)
+            
+    if (activity_type == "Instruction" or activity_type == "Warm-Up" or activity_type == "Summary"):
         try:
+            switchToStage()
+            
             total_frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
             print("Finding frames on assignment")
 
         except StaleElementReferenceException:
 
             completeActivity()
-            total_frames = []
 
         activity_frames = total_frames
         activity_frames.pop(0)
         activity_frames.pop( (len(activity_frames))-1 )
         print("Setting up frame storage")
-
-    except TimeoutException:
-
-        activity_frames = []
-        
-        print(Fore.CYAN + "Test/Quiz Detected" + Fore.RESET)
-        cont = input("  Continue? (y/n) ") 
-        
-        if (cont == 'y'):
-            print("  Continuing...")
-
-            try:
-                waitFindElementClick(By.XPATH, '//button[@data-bind="click: $root.startActivity"]')
-            except TimeoutException: ...
-
-            try: 
-                waitFindElementClick(By.XPATH, '//a[@href="#activity"]')
-                print("Switching out of Enotes")
-            except TimeoutException: ...
-
-            print("switching to iframe")
-            switchToStage()
-
-            questions = waitFindElements(By.XPATH, '//ol[@id="navBtnList"]/li', parent=None, timeout=10)
-            questions.pop(0)
-            questions.pop( (len(questions))-1 )
-
-            print(questions)
-
-            for question in questions:
-                
-                multipleChoice()
-
-                waitFindElementClick(By.XPATH, '//a[@id="nextQuestion"]')
-
-            questions[0].click()
-
-
-            
-    if (activity_frames != []):
-        switchToStage()
 
         for frame in activity_frames:
 
@@ -106,6 +64,7 @@ def completeActivity():
                 
                 print(Fore.RED + "~ Next Frame ~" + Fore.RESET)
 
+                switchToStage()
                 waitFindElementClick(By.XPATH, '//li[@class="FrameRight"]/a')
                 continue
 
@@ -135,15 +94,15 @@ def completeActivity():
                     pass
                 
                 handleQuestion()
+
+                if (frame == upcoming_frames[( len(upcoming_frames)-1 )] and (frame.value_of_css_property("class") == "FrameCurrent FrameComplete")):
+                    
+                    print(Fore.RED + "~ Last frame ~" + Fore.RESET)
+                    break
                 
             except TimeoutException:...
 
             switchToStage()
-
-            if (frame == upcoming_frames[( len(upcoming_frames)-1 )] and (frame.value_of_css_property("class") == "FrameCurrent FrameComplete")):
-                    
-                print(Fore.RED + "~ Last frame ~" + Fore.RESET)
-                break
             
             try:
                 waitForOpacityChange(By.XPATH, '//li[@class="FrameRight"]')
@@ -165,8 +124,28 @@ def completeActivity():
 
     else:
 
-        print(Fore.LIGHTMAGENTA_EX + "~ Task successfully completed! ~" + Fore.RESET)
-        return
+        cont = input("  Continue? (y/n) ") 
+        while cont != "y" and cont != "n":
+            cont = input("  Continue? (y/n) ") 
+
+        if (cont == 'y'):
+
+            print("  Continuing...")
+
+            try:
+                waitFindElementClick(By.XPATH, '//button[@data-bind="click: $root.startActivity"]')
+
+            except TimeoutException: ...
+
+            try: 
+                waitFindElementClick(By.XPATH, '//a[@href="#activity"]')
+                print("Switching out of Enotes")
+
+            except TimeoutException: ...
+
+            switchToStage()
+
+            runThread()
 
     driver.switch_to.default_content()
 
@@ -176,7 +155,7 @@ def completeActivity():
 
     except TimeoutException:
 
-        waitFindElementClick(By.XPATH, '//a[@title="Next Activity"]')
+        nextActivity()
 
     print(Fore.GREEN + "~ Next activity ~" + Fore.RESET)
     

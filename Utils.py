@@ -13,6 +13,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
+from threading import Thread
 
 chrome_options=webdriver.ChromeOptions()
 chrome_options.add_experimental_option("detach", True)
@@ -25,15 +26,21 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 
 wait = WebDriverWait(driver=driver, timeout=1.5)
 
-def findElement( finder: By, element: str, implicit_wait=0 ):
+def findElement( finder: By, element: str, implicit_wait=0, parent=None ):
     driver.implicitly_wait(implicit_wait)
 
-    return driver.find_element(finder, element)
+    if parent is None:
+        return driver.find_element(finder, element)
+    else:
+        return parent.find_element(finder, element)
     
-def findElements( finder: By, element: str, implicit_wait=0 ):
+def findElements( finder: By, element: str, implicit_wait=0, parent=None ):
     driver.implicitly_wait(implicit_wait)
 
-    return driver.find_elements(finder, element)    
+    if parent is None:
+        return driver.find_elements(finder, element)
+    else:
+        return parent.find_elements(finder, element)   
 
 
 def waitFindElement ( finder: By, element: str, parent=None, timeout=0 ):
