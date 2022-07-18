@@ -32,13 +32,3 @@ python3 Run.py
 py Run.py
 ```
 ---
-## Known Bugs 🤫
-1. When logging in to MyPlan, sometimes the request takes too long & the script times out.
-```cmd
-FIX: Try cicking the Login button in the browser (This isn't reliable because timeouts can still occur due to human error)
-FIX: Run the script again (Usually works another time around)
-```
----
-## Preview 🤑
-![Console Output](https://media.discordapp.net/attachments/882455696199807007/993448709947936788/unknown.png)
-This shows an example console output <br />
