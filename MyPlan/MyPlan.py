@@ -23,7 +23,7 @@ def login():
 
 def openEdgenuity():
 
-    opening_string = Fore.Blue + "Opening Edgenuity\n" + Fore.WHITE+ "(Try clicking the sign in button manually if you are not logged in after a few seconds)"
+    opening_string = Fore.BLUE + "Opening Edgenuity\n" + Fore.WHITE+ "(Try clicking the sign in button manually if you are not logged in after a few seconds)"
     formatPrint(opening_string)
 
     edgenuity_link = waitFindElement(By.XPATH, '//application[@aria-label="Edgenuity (Student)"]', timeout=20)
