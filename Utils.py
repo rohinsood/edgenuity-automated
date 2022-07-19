@@ -26,6 +26,14 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 
 wait = WebDriverWait(driver=driver, timeout=1.5)
 
+def formatPrint( string: str, color=Fore.WHITE, recursive=False ):
+    terminal_format = Fore.GREEN + r"\e\> " 
+    print(terminal_format + color + string, end="\r") if recursive else print(terminal_format + color + string)
+
+def formatInput( string: str, color=Fore.WHITE ):
+    terminal_format = Fore.GREEN + r"\e\> " 
+    return input(terminal_format + color + string)
+
 def findElement( finder: By, element: str, implicit_wait=0, parent=None ):
     driver.implicitly_wait(implicit_wait)
 
@@ -86,7 +94,6 @@ def waitFindElements( finder: By, element: str, parent=None, timeout=0 ):
 def findElementClick ( finder: By, element: str, implicit_wait=0 ):
 
     driver.implicitly_wait(implicit_wait)
-    print(driver.find_element(finder, element).get_attribute('class'))
     driver.find_element(finder, element).click()
 
 def waitFindElementClick ( finder: By, element: str):
@@ -97,45 +104,19 @@ def waitFindElementClick ( finder: By, element: str):
 
     driver.find_element(finder, element).click()
 
-def waitForOpacityChange ( finder: By, element: str ):
-    opacity_element = waitFindElement(finder, element)
+def waitForOpacityChange ():
+    opacity_element = waitFindElement(By.XPATH, '//li[@class="FrameRight"]')
     
     start_time = time.time()
     while ((opacity_element.get_attribute('style') == "") or (opacity_element.get_attribute('style') == "opacity: 1;")):
         end_time = time.time()
-        time_lapsed = str(round((end_time - start_time), 3))
-        update_string = Fore.YELLOW + "~ Waiting for frame to be marked as complete - Time lapsed: " + time_lapsed + Fore.RESET
-        print( update_string, end="\r", )
+        time_lapsed = str(round((end_time - start_time), 1))
+        update_string = Fore.YELLOW + "Waiting for frame to be marked as complete - Time lapsed: " + time_lapsed + Fore.RESET
+        formatPrint( update_string, recursive="\r", )
 
         try:
-            opacity_element = findElement(finder, element)
+            opacity_element = findElement(By.XPATH, '//li[@class="FrameRight"]')
         except NoSuchElementException:
             break
     
     print("")
-
-
-def waitForOpacityChangeClick ( finder: By, element: str ):
-
-    opacity_element = waitFindElement(finder, element)
-        
-    start_time = time.time()
-    while ((opacity_element.get_attribute('style') == "") or (opacity_element.get_attribute('style') == "opacity: 1;")):
-        end_time = time.time()
-        time_lapsed = str(round((end_time - start_time), 3))
-        update_string = Fore.YELLOW + "~ Waiting for frame to be marked as complete - Time lapsed: " + time_lapsed + Fore.RESET
-        print( update_string, end="\r", )
-
-        try:
-            print("tryna click")
-            waitFindElementClick(By.XPATH, '//span[@id="btnCheck"]')
-            print("clicked")
-        except ElementClickInterceptedException: 
-            print("intercepted")
-
-        try:
-            opacity_element = findElement(finder, element)
-        except NoSuchElementException:
-            break
-
-        print("")

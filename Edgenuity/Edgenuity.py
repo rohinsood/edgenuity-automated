@@ -1,4 +1,3 @@
-from xml.dom.minidom import Element
 from Utils import *
 from .Handling import *
 
@@ -6,7 +5,7 @@ def activeSession():
     try:
         waitFindElementClick(By.NAME, 'continue')
 
-        print("Becoming active session")
+        formatPrint("Becoming active session")
 
     except TimeoutException:
 
@@ -15,7 +14,7 @@ def activeSession():
 def closeAnnouncement():
     try:
         waitFindElementClick(By.XPATH, '//button[@class="close"]')
-        print("Closing announcement")
+        formatPrint("Closing announcement")
 
     except TimeoutException:
         pass
@@ -24,26 +23,28 @@ def nextActivity():
 
     waitFindElementClick(By.XPATH, '//a[@title="Next Activity"]')
 
-    print(Fore.GREEN + "~ Next activity ~" + Fore.RESET)
+    formatPrint("Next activity", color=Fore.RED)
 
 
 def completeActivity():
 
     try: 
         waitFindElementClick(By.XPATH, '//button[@href="#activity"]')
-        print("Switching out of Enotes")
+        formatPrint("Switching out of Enotes")
 
     except TimeoutException: ...
 
+    driver.switch_to.default_content()
+
     activity_type = waitFindElement(By.XPATH, '//h2[@id="activity-title"]').text
-    print(Fore.GREEN + "~ Activity type: " + activity_type + Fore.RESET)
+    formatPrint(("Activity type: " + activity_type), color=Fore.CYAN)
             
     if (activity_type == "Instruction" or activity_type == "Warm-Up" or activity_type == "Summary" or activity_type == "Assignment"):
         try:
             switchToStage()
             
             total_frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
-            print("Finding frames on assignment")
+            formatPrint("Finding frames on assignment")
 
         except StaleElementReferenceException:
 
@@ -52,7 +53,7 @@ def completeActivity():
         activity_frames = total_frames
         activity_frames.pop(0)
         activity_frames.pop( (len(activity_frames))-1 )
-        print("Setting up frame storage")
+        formatPrint("Setting up frame storage")
 
         for frame in activity_frames:
 
@@ -63,7 +64,7 @@ def completeActivity():
 
             elif ((frame.get_attribute("class") == "FrameCurrent FrameComplete")):
                 
-                print(Fore.RED + "~ Next Frame ~" + Fore.RESET)
+                formatPrint("Next Frame", color=Fore.RED)
 
                 switchToStage()
                 waitFindElementClick(By.XPATH, '//li[@class="FrameRight"]/a')
@@ -83,7 +84,7 @@ def completeActivity():
                 driver.switch_to.frame(question_iframe)
                 waitFindElement(By.CLASS_NAME, 'title-bar')
 
-                print(Fore.GREEN + "Question detected" + Fore.RESET)
+                formatPrint("Question detected")
 
                 try:
 
@@ -94,25 +95,10 @@ def completeActivity():
                 except TimeoutException:
                     pass
                 
-                if(activity_type == "Assignment"):
-                    handleQuestion()
-                else:
-                    while True:
-                        try:
-                            print("clicking answer cjoice")
-                            waitFindElementClick(By.XPATH, '//div[@class="answer-choice"]')
-                            print("clicked")
-                            break
-                        except ElementClickInterceptedException:
-                            pass
-                        except TimeoutException:
-                            break
-
-                    waitForOpacityChangeClick(By.XPATH, '//li[@class="FrameRight"]')
+                handleQuestion()
                     
                 if (frame == upcoming_frames[( len(upcoming_frames)-1 )] and (frame.value_of_css_property("class") == "FrameCurrent FrameComplete")):
                     
-                    print(Fore.RED + "~ Last frame ~" + Fore.RESET)
                     break
                 
             except TimeoutException:...
@@ -120,14 +106,15 @@ def completeActivity():
             switchToStage()
             
             try:
-                waitForOpacityChange(By.XPATH, '//li[@class="FrameRight"]')
+                waitForOpacityChange()
 
             except StaleElementReferenceException:
                 break
             
             switchToStage()
 
-            print(Fore.RED + "~ Next frame ~" + Fore.RESET)
+            formatPrint("Next Frame", color=Fore.RED)
+
             try: 
 
                 waitFindElementClick(By.XPATH, '//li[@class="FrameRight"]/a')
@@ -138,13 +125,15 @@ def completeActivity():
                 continue
     else:
 
-        cont = input("  Continue? (y/n) ") 
+        cont = formatInput("Continue? (y/n) ") 
         while cont != "y" and cont != "n":
-            cont = input("  Continue? (y/n) ") 
+            cont = formatInput("Continue? (y/n) ") 
 
         if (cont == 'y'):
 
-            print("  Continuing...")
+            formatPrint("Continuing...")
+
+            switchToStage()
 
             try:
                 waitFindElementClick(By.XPATH, '//button[@data-bind="click: $root.startActivity"]')
@@ -153,13 +142,29 @@ def completeActivity():
 
             try: 
                 waitFindElementClick(By.XPATH, '//a[@href="#activity"]')
-                print("Switching out of Enotes")
+                formatPrint("Switching out of Enotes")
 
             except TimeoutException: ...
 
-            switchToStage()
+        while True:
 
-            runThread()
+            goodluck_string = Fore.GREEN + "Good Luck!" + Fore.WHITE + "(n to go to the next activity when done) "
+            goodluck_prompt = formatInput(goodluck_string)
+
+            if (goodluck_prompt == 'n'):
+                break
+
+            else:
+
+                try:
+                    parent = waitFindElement(By.XPATH, '//div[@class="Assessment_Main_Body_Content_Question"][@style="display: block;"]/form/div/div[@class="Question_Contents"]/div')
+                    multipleChoice(parent=parent)
+                except TimeoutException:
+                    try:
+                        parent = waitFindElement(By.XPATH, '//div[@class="Assessment_Main_Body_Content_Question"][@style="display: block;"]/form/div/div[@class="Question_Contents"]')
+                        dropdown(parent=parent)
+                    except TimeoutException:
+                        print("Unable to search")
 
     driver.switch_to.default_content()
 
@@ -171,7 +176,7 @@ def completeActivity():
 
         nextActivity()
 
-    print(Fore.GREEN + "~ Next activity ~" + Fore.RESET)
-    
+    formatPrint("Next activity", color=Fore.RED)
+
     completeActivity()
 
