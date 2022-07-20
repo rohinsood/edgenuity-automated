@@ -21,11 +21,15 @@ def switchToStage():
     stage_iframe = waitFindElement(By.XPATH, '//iframe[@allow]', timeout=10)
     driver.switch_to.frame(stage_iframe)
 
+def switchToPreview():
+    switchToStage()
+    question_iframe = waitFindElement(By.XPATH, '//iframe[@id="iFramePreview"]')
+    driver.switch_to.frame(question_iframe)
+
 def reading( search_strings: list, parent=None ):
 
     try:
         reading = waitFindElement(By.XPATH, '//div[@class="reading pane-blue"]', parent=parent, timeout=.5).text
-        print(Fore.LIGHTCYAN_EX + "    Reading question detected" + Fore.RESET)
         search_strings.append(reading)
 
     except TimeoutException: 
@@ -89,7 +93,7 @@ def dropdown( parent=None ):
 
     dropdown_question = [choice.text for choice in dropdown_question]
 
-    print(Fore.CYAN + "    Dropdown MC detected" + Fore.RESET)
+    formatPrint("> Dropdown Question Detected", color=Fore.MAGENTA)
     
     search(dropdown_question, search_strings)
 
@@ -98,76 +102,22 @@ def shortAnswer():
 
     waitFindElement(By.XPATH, '//textarea[@class="QuestionTextArea"]')
 
+    formatPrint("> Short Answer Question Detected", color=Fore.MAGENTA)
+
     reading(search_strings=search_strings)
 
     prompts = waitFindElements(By.XPATH, '//div[@class="Practice_Question_Body"]')
     prompts = [prompt.text for prompt in prompts]
 
-    print(Fore.CYAN + "    Short Answer Detected" + Fore.RESET)
-
     search(prompts, search_strings)
 
 def matchingActivity():
-  waitFindElement(By.XPATH, '//div[@id="matchingActivity"]')
-  print(Fore.CYAN + "    Matching activity detected" + Fore.RESET)
+    waitFindElement(By.XPATH, '//div[@id="matchingActivity"]')
+    formatPrint("> Matching Activity Detected", color=Fore.MAGENTA)
 
 def collumnActivity():
-  waitFindElement(By.XPATH, '//div[@class="sbgColumn leftColumn sbg2Cat"]')
-  print(Fore.CYAN + "    Collumn activity detected" + Fore.RESET)  
-
-def quizPrompt():
-    
-    global quiz_completed
-
-    while not quiz_completed:
-
-        search_prompt = input("Good Luck! (q to quit) ")
-
-        if (search_prompt == 'q'):
-            quiz_completed = True
-            break
-
-        else:
-
-            try:
-                parent = waitFindElement(By.XPATH, '//div[@class="Assessment_Main_Body_Content_Question"][@style="display: block;"]/form/div/div[@class="Question_Contents"]/div')
-                multipleChoice(parent=parent)
-            except TimeoutException:
-                try:
-                    parent = waitFindElement(By.XPATH, '//div[@class="Assessment_Main_Body_Content_Question"][@style="display: block;"]/form/div/div[@class="Question_Contents"]')
-                    dropdown(parent=parent)
-                except TimeoutException:
-                    print("Unable to search")
-
-def quizCompleted():
-
-    global quiz_completed
-
-    while not quiz_completed:
-
-        try:
-
-            waitFindElement(By.XPATH, '//div[@class="overlay-attempt-primary-section"]', timeout=.5)
-            quiz_completed = True
-            break
-
-        except TimeoutException: ...
-            
-def runThread():
-
-    global quiz_completed
-
-    quizPromptThread = Thread(target=quizPrompt)
-    quizCompletedThread = Thread(target=quizCompleted)
-
-    quizPromptThread.start()
-    quizCompletedThread.start()
-
-    quizPromptThread.join()
-    quizCompletedThread.join()
-    
-    quiz_completed = True
-    print("quiz completed")
+    waitFindElement(By.XPATH, '//div[@class="sbgColumn leftColumn sbg2Cat"]')
+    formatPrint("> Collumn Activity Detected", color=Fore.MAGENTA)
 
 def handleQuestion():
 

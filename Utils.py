@@ -1,7 +1,7 @@
 from itertools import dropwhile
 import time
 from selenium import webdriver
-from colorama import Fore
+from colorama import Fore, Back, Style
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
@@ -13,7 +13,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
-from threading import Thread
+from selenium.common.exceptions import ElementNotInteractableException
 
 chrome_options=webdriver.ChromeOptions()
 chrome_options.add_experimental_option("detach", True)
@@ -25,6 +25,14 @@ chrome_options.add_argument('−−mute−audio')
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
 wait = WebDriverWait(driver=driver, timeout=1.5)
+
+def formatPrint( string: str, color=Fore.WHITE, recursive=False ):
+    terminal_format = Fore.GREEN + r"\e\> " 
+    print(terminal_format + color + string + Fore.RESET, end="\r") if recursive else print(terminal_format + color + string)
+
+def formatInput( string: str, color=Fore.WHITE ):
+    terminal_format = Fore.GREEN + r"\e\> " 
+    return input(terminal_format + color + string + Fore.RESET)
 
 def findElement( finder: By, element: str, implicit_wait=0, parent=None ):
     driver.implicitly_wait(implicit_wait)
@@ -86,7 +94,6 @@ def waitFindElements( finder: By, element: str, parent=None, timeout=0 ):
 def findElementClick ( finder: By, element: str, implicit_wait=0 ):
 
     driver.implicitly_wait(implicit_wait)
-    print(driver.find_element(finder, element).get_attribute('class'))
     driver.find_element(finder, element).click()
 
 def waitFindElementClick ( finder: By, element: str):
@@ -97,21 +104,19 @@ def waitFindElementClick ( finder: By, element: str):
 
     driver.find_element(finder, element).click()
 
-def waitForOpacityChange ( finder: By, element: str ):
-    opacity_element = waitFindElement(finder, element)
+def waitForQuestionCompletion ():
+    opacity_element = waitFindElement(By.XPATH, '//li[@class="FrameRight"]')
     
     start_time = time.time()
     while ((opacity_element.get_attribute('style') == "") or (opacity_element.get_attribute('style') == "opacity: 1;")):
         end_time = time.time()
-        time_lapsed = str(round((end_time - start_time), 3))
-        update_string = Fore.YELLOW + "~ Waiting for frame to be marked as complete - Time lapsed: " + time_lapsed + Fore.RESET
-        print( update_string, end="\r", )
+        time_lapsed = str(round((end_time - start_time), 1))
+        update_string = Fore.YELLOW + "Waiting for frame to be marked as complete " + Fore.WHITE  + " < Time lapsed: " + time_lapsed + " >" + Fore.RESET
+        formatPrint( update_string, recursive="\r", )
 
         try:
-            opacity_element = findElement(finder, element)
+            opacity_element = findElement(By.XPATH, '//li[@class="FrameRight"]')
         except NoSuchElementException:
             break
     
     print("")
-
-    
