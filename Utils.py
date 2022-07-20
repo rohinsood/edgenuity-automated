@@ -28,7 +28,7 @@ wait = WebDriverWait(driver=driver, timeout=1.5)
 
 def formatPrint( string: str, color=Fore.WHITE, recursive=False ):
     terminal_format = Fore.GREEN + r"\e\> " 
-    print(terminal_format + color + string + Fore.RESET, end="\r") if recursive else print(terminal_format + color + string)
+    print(terminal_format + color + string + Fore.RESET, end="\r") if recursive else print(terminal_format + color + string + Fore.RESET)
 
 def formatInput( string: str, color=Fore.WHITE ):
     terminal_format = Fore.GREEN + r"\e\> " 
