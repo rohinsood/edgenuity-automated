@@ -21,6 +21,11 @@ def switchToStage():
     stage_iframe = waitFindElement(By.XPATH, '//iframe[@allow]', timeout=10)
     driver.switch_to.frame(stage_iframe)
 
+def switchToPreview():
+    switchToStage()
+    question_iframe = waitFindElement(By.XPATH, '//iframe[@id="iFramePreview"]')
+    driver.switch_to.frame(question_iframe)
+
 def reading( search_strings: list, parent=None ):
 
     try:
@@ -88,6 +93,7 @@ def dropdown( parent=None ):
 
     dropdown_question = [choice.text for choice in dropdown_question]
 
+    formatPrint("> Dropdown Question Detected", color=Fore.MAGENTA)
     
     search(dropdown_question, search_strings)
 
@@ -95,6 +101,8 @@ def shortAnswer():
     search_strings = []
 
     waitFindElement(By.XPATH, '//textarea[@class="QuestionTextArea"]')
+
+    formatPrint("> Short Answer Question Detected", color=Fore.MAGENTA)
 
     reading(search_strings=search_strings)
 
@@ -104,10 +112,12 @@ def shortAnswer():
     search(prompts, search_strings)
 
 def matchingActivity():
-  waitFindElement(By.XPATH, '//div[@id="matchingActivity"]')
+    waitFindElement(By.XPATH, '//div[@id="matchingActivity"]')
+    formatPrint("> Matching Activity Detected", color=Fore.MAGENTA)
 
 def collumnActivity():
-  waitFindElement(By.XPATH, '//div[@class="sbgColumn leftColumn sbg2Cat"]')
+    waitFindElement(By.XPATH, '//div[@class="sbgColumn leftColumn sbg2Cat"]')
+    formatPrint("> Collumn Activity Detected", color=Fore.MAGENTA)
 
 def handleQuestion():
 
