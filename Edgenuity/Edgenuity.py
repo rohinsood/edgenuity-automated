@@ -241,6 +241,10 @@ def completeActivity():
 
         waitFindElementClick(By.XPATH, '//a[@class="footnav goRight"]')
 
+        try:
+            nextActivity()
+        except TimeoutException: ...
+
     except TimeoutException:
 
         nextActivity()
