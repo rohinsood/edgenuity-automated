@@ -38,7 +38,7 @@ def completeActivity():
     except TimeoutException: ...
 
     activity_type = waitFindElement(By.XPATH, '//h2[@id="activity-title"]').text
-    formatPrint(("Activity type: " + activity_type), color=Fore.CYAN)
+    formatPrint(("Activity type: " + activity_type))
             
     if (activity_type == "Instruction" or activity_type == "Warm-Up" or activity_type == "Summary" or activity_type == "Assignment"):
        
@@ -87,7 +87,7 @@ def completeActivity():
                 switchToPreview()
                 waitFindElement(By.CLASS_NAME, 'title-bar')
 
-                formatPrint("Question detected", color=Fore.MAGENTA)
+                formatPrint("Question detected")
 
                 if (activity_type == "Assignment"):
 

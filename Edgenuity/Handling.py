@@ -93,7 +93,7 @@ def dropdown( parent=None ):
 
     dropdown_question = [choice.text for choice in dropdown_question]
 
-    formatPrint("> Dropdown Question Detected", color=Fore.MAGENTA)
+    formatPrint("> Dropdown Question Detected")
     
     search(dropdown_question, search_strings)
 
@@ -102,7 +102,7 @@ def shortAnswer():
 
     waitFindElement(By.XPATH, '//textarea[@class="QuestionTextArea"]')
 
-    formatPrint("> Short Answer Question Detected", color=Fore.MAGENTA)
+    formatPrint("> Short Answer Question Detected")
 
     reading(search_strings=search_strings)
 
@@ -113,11 +113,11 @@ def shortAnswer():
 
 def matchingActivity():
     waitFindElement(By.XPATH, '//div[@id="matchingActivity"]')
-    formatPrint("> Matching Activity Detected", color=Fore.MAGENTA)
+    formatPrint("> Matching Activity Detected")
 
 def collumnActivity():
     waitFindElement(By.XPATH, '//div[@class="sbgColumn leftColumn sbg2Cat"]')
-    formatPrint("> Collumn Activity Detected", color=Fore.MAGENTA)
+    formatPrint("> Collumn Activity Detected")
 
 def handleQuestion():
 
