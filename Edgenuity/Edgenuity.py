@@ -151,8 +151,10 @@ def completeActivity():
                     waitForQuestionCompletion()
 
                     try: 
-
-                        waitFindElementClick(By.XPATH, '//li[@class="FrameRight"]/a')
+                        
+                        try:
+                            waitFindElementClick(By.XPATH, '//li[@class="FrameRight"]/a')
+                        except ElementClickInterceptedException: ...
 
                         formatPrint("Next Frame", color=Fore.RED)
 
@@ -233,7 +235,7 @@ def completeActivity():
                             parent = waitFindElement(By.XPATH, '//div[@class="Assessment_Main_Body_Content_Question"][@style="display: block;"]/form/div/div[@class="Question_Contents"]')
                             dropdown(parent=parent)
                         except TimeoutException:
-                            print("Unable to search")
+                            formatPrint("Unable to search", color=Fore.RESET)
 
     driver.switch_to.default_content()
 
