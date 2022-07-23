@@ -42,8 +42,11 @@ def completeActivity():
             
     if (activity_type == "Instruction" or activity_type == "Warm-Up" or activity_type == "Summary" or activity_type == "Assignment"):
        
+        switchToStage()
+
+        driver.execute_script('document.getElementById("invis-o-div").style.display = "none";')
+
         try:
-            switchToStage()
             
             total_frames = waitFindElements(By.XPATH, '//ol[@class="FramesList"]/li')
 
@@ -102,8 +105,18 @@ def completeActivity():
 
                     except TimeoutException:
                         switchToPreview()
-                        done_button_orange = waitFindElement(By.XPATH, '//div[@fdone]')
-                        done_button = []
+
+                        try:     
+                            done_button_orange = waitFindElement(By.XPATH, '//div[@class="done-start"]', timeout=1)
+                            done_button = []
+
+                        except TimeoutException:
+                            try:
+                                done_button_orange = waitFindElement(By.XPATH, '//div[@class="done-retry"]', timeout=1)
+                                done_button = []
+
+                            except TimeoutException: 
+                                break
                     
                     switchToStage()
                     
