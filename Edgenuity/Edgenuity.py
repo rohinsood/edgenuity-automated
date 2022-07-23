@@ -142,7 +142,9 @@ def completeActivity():
                             except TimeoutException: ...
 
                             if done_button == []:
-                                done_button_orange.click()
+                                try:
+                                    done_button_orange.click()
+                                except ElementClickInterceptedException: ...
                                 count += 1
 
                             else:
